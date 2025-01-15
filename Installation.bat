@@ -16,6 +16,7 @@ echo 3. Parte 3 (Chocolatey installation)
 echo 4. Parte 4 (Software and Driver Installations)
 echo 5. Parte 5 (Definition of the Department)
 echo 6. Parte 6 (Final - Close all services of installation)
+echo 7. Parte 7 (Remove softwares of the system)
 echo 0. Sair
 echo.
 
@@ -27,6 +28,7 @@ if "%opcao%"=="3" goto parte3
 if "%opcao%"=="4" goto parte4
 if "%opcao%"=="5" goto parte5
 if "%opcao%"=="6" goto parte6
+if "%opcao%"=="7" goto parte7
 if "%opcao%"=="0" goto sair
 
 echo Opcao invalida!
@@ -73,48 +75,7 @@ rem powershell -Command "Get-AppxPackage Microsoft.OneConnect | Remove-AppxPacka
 rem powershell -Command "Get-AppxPackage Microsoft.549981C3F5F10 | Remove-AppxPackage"
 rem powershell -Command "Get-AppxPackage Microsoft.OneDrive | Remove-AppxPackage"
 rem powershell -Command "Get-AppxPackage MicrosoftTeams | Remove-AppxPackage"
-   
-:: Habilitar a execução de scripts PowerShell
-powershell -Command "Set-ExecutionPolicy RemoteSigned -Scope Process"
-
-:: Remover o pacote específico
-powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F10 | Remove-AppxPackage"
-powershell -Command "Get-AppxPackage -allusers *Microsoft.549981C3F5F10* | Remove-AppxPackage"
-
-:: Definir a lista de aplicativos a serem desinstalados
-set appsToUninstall=(
-    "Microsoft.3DBuilder",
-    "Microsoft.BingWeather",
-    "Microsoft.GetHelp",
-    "Microsoft.Getstarted",
-    "Microsoft.Messaging",
-    "Microsoft.Microsoft3DViewer",
-    "Microsoft.MicrosoftOfficeHub",
-    "Microsoft.MicrosoftSolitaireCollection",
-    "Microsoft.Office.OneNote",
-    "Microsoft.MixedReality.Portal",
-    "Microsoft.OneConnect",
-    "Microsoft.People",
-    "Microsoft.Print3D",
-    "Microsoft.SkypeApp",
-    "Microsoft.StorePurchaseApp",
-    "Microsoft.Wallet",
-    "microsoft.windowscommunicationsapps",
-    "Microsoft.WindowsFeedbackHub",
-    "Microsoft.WindowsMaps",
-    "Microsoft.XboxApp",
-    "Microsoft.XboxGameOverlay",
-    "Microsoft.XboxIdentityProvider",
-    "Microsoft.XboxSpeechToTextOverlay",
-    "Microsoft.YourPhone"
-)
-
-:: Iterar sobre a lista e desinstalar os aplicativos
-for %%a in %appsToUninstall% do (
-    powershell -Command "Get-AppxPackage -Name %%a -AllUsers | Remove-AppxPackage"
-    powershell -Command "Get-AppxProvisionedPackage -Online | Where-Object DisplayName -eq '%%a' | Remove-AppxProvisionedPackage -Online"
-)
-
+ 
 
 REM Copiar a pasta de assets para o disco Local
 set "source=%USERPROFILE%\Desktop\assets"
@@ -565,6 +526,61 @@ cls
 goto END
 
 
+
+
+:parte7
+echo Executando a Parte 7...
+@ECHO OFF
+
+@echo ============================================================================
+@echo    Script de remoção softwares de fábrica.
+@echo ============================================================================
+pause
+
+:: Habilitar a execução de scripts PowerShell
+powershell -Command "Set-ExecutionPolicy RemoteSigned -Scope Process"
+
+:: Remover o pacote específico
+powershell -Command "Get-AppxPackage -allusers Microsoft.549981C3F5F10 | Remove-AppxPackage"
+powershell -Command "Get-AppxPackage -allusers *Microsoft.549981C3F5F10* | Remove-AppxPackage"
+
+:: Definir a lista de aplicativos a serem desinstalados
+set appsToUninstall=(
+    "Microsoft.3DBuilder",
+    "Microsoft.BingWeather",
+    "Microsoft.GetHelp",
+    "Microsoft.Getstarted",
+    "Microsoft.Messaging",
+    "Microsoft.Microsoft3DViewer",
+    "Microsoft.MicrosoftOfficeHub",
+    "Microsoft.MicrosoftSolitaireCollection",
+    "Microsoft.Office.OneNote",
+    "Microsoft.MixedReality.Portal",
+    "Microsoft.OneConnect",
+    "Microsoft.People",
+    "Microsoft.Print3D",
+    "Microsoft.SkypeApp",
+    "Microsoft.StorePurchaseApp",
+    "microsoft.windowscommunicationsapps",
+    "Microsoft.WindowsFeedbackHub",
+    "Microsoft.WindowsMaps",
+    "Microsoft.XboxApp",
+    "Microsoft.XboxGameOverlay",
+    "Microsoft.XboxIdentityProvider",
+    "Microsoft.XboxSpeechToTextOverlay",
+    "Microsoft.YourPhone"
+)
+
+:: Iterar sobre a lista e desinstalar os aplicativos
+for %%a in %appsToUninstall% do (
+    powershell -Command "Get-AppxPackage -Name %%a -AllUsers | Remove-AppxPackage"
+    powershell -Command "Get-AppxProvisionedPackage -Online | Where-Object DisplayName -eq '%%a' | Remove-AppxProvisionedPackage -Online"
+)
+
+msg %username% Softwares desinstalados com sucesso!
+goto menu
+
+
 :END
 exit
 pause
@@ -573,9 +589,3 @@ goto menu
 :sair
 echo Exiting the program...
 exit
-
-
-
-
-
-
